@@ -2725,6 +2725,12 @@ void XMLPrinter::OpenElement( const char* name, bool compactMode )
     PrepareForNewNode( compactMode );
     _stack.Push( name );
 
+    //---- Tsuji change
+    {
+        Putc( '\n' );
+        PrintSpace( _depth );
+    }
+
     Write ( "<" );
     Write ( name );
 
@@ -2736,6 +2742,13 @@ void XMLPrinter::OpenElement( const char* name, bool compactMode )
 void XMLPrinter::PushAttribute( const char* name, const char* value )
 {
     TIXMLASSERT( _elementJustOpened );
+
+    //---- Tsuji change
+    {
+        Putc( '\n' );
+        PrintSpace( _depth );
+    }
+
     Putc ( ' ' );
     Write( name );
     Write( "=\"" );
@@ -2802,6 +2815,11 @@ void XMLPrinter::CloseElement( bool compactMode )
     }
     else {
         if ( _textDepth < 0 && !compactMode) {
+            Putc( '\n' );
+            PrintSpace( _depth );
+        }
+        //---- Tsuji change
+        else if ( !compactMode ) {
             Putc( '\n' );
             PrintSpace( _depth );
         }
